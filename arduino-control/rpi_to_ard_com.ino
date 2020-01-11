@@ -51,9 +51,9 @@ void enable_jog_mode() {
 
 bool jog_pin_enabled() {
   if (digitalRead(jogPin) == HIGH) {
-    return true;
-  } else {
     return false;
+  } else {
+    return true;
   }
 }
 
@@ -81,7 +81,7 @@ void setup() {
 }
 
 void loop() {
-  if (jog_pin_enabled()) {
+  if (!jog_pin_enabled()) {
     disable_jog_mode();
     move_to_setpoint();
   } else {
