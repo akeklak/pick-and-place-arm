@@ -7,6 +7,7 @@ int jointCPin = 6;
 int jogPin = 8;
 int jogPlusPin = 9;
 int jogMinusPin = 10;
+int jogSpeedPin = A0;
 bool jogModeEnabled = false;
 
 //takes an array of ints and writes them
@@ -57,16 +58,21 @@ bool jog_pin_enabled() {
   }
 }
 
+int read_jog_speed() {
+  int jogSpeed = 1024 - analogRead(jogSpeedPin);
+  return jogSpeed/25;
+}
+
 //make generic jog joint function
-void jog_jointA() {
-  int current_position = jointA.read();
+void jog_joint(Servo joint) {
+  int current_position = joint.read();
   if (digitalRead(jogPlusPin) == LOW) {
     current_position += 1;
   } else if (digitalRead(jogMinusPin) == LOW) {
     current_position -= 1;
   }
-  jointA.write(current_position);
-  delay(20);
+  joint.write(current_position);
+  delay(read_jog_speed());
 }
 
 void setup() {
@@ -87,6 +93,8 @@ void loop() {
   } else {
     enable_jog_mode();
     //read jog speed potentiometer
-    jog_jointA();
+    jog_joint(jointA);
+    jog_joint(jointB);
+    jog_joint(jointC);
   }
 }
